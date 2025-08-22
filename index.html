@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Абсурдная Игра</title>
-  
+
   <!-- Код Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-8922825157298560"
     crossorigin="anonymous"></script>
 
+  <!-- Подключение CSS-стилей -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -20,7 +21,7 @@
     <button class="new-phrase-btn" id="next-btn" style="display:none">Следующая фраза</button>
   </div>
 
-  <!-- Новые разделы, скрытые по умолчанию -->
+  <!-- Новые разделы, скрытые по умолчанию. Их видимость будет управляться с помощью JS -->
   <div class="container hidden-section" id="about-section">
     <h1 class="neon">О нас</h1>
     <p>«Абсурдная Игра» — это проект, созданный с целью повеселиться и развлечься, генерируя самые нелепые и неожиданные фразы. Мы верим, что абсурд и юмор помогают сделать жизнь ярче. Присоединяйтесь!</p>
@@ -53,7 +54,7 @@
     <a href="#" class="back-link" data-target="main">Вернуться к игре</a>
   </div>
 
-  <!-- Футер с навигацией для AdSense -->
+  <!-- Футер с навигацией -->
   <footer class="footer">
     <div class="footer-links">
       <a href="#" data-target="about">О нас</a>
@@ -83,6 +84,7 @@
     </div>
   </div>
 
+  <!-- Подключение основного JavaScript-файла -->
   <script src="js/app.js" defer></script>
 </body>
 </html>
