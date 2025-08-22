@@ -83,8 +83,9 @@ const chatInput = document.getElementById("chat-input");
 const sendBtn = document.getElementById("send-btn");
 
 // Конфигурация Gemini API
-const GEMINI_API_KEY = ""; // Ключ API будет предоставлен во время выполнения
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent";
+const RAPID_API_KEY = "bb6ec1b4e4msh01b6b1ffd9a09f5p111d1fjsn9c51ef8e768c"; // ВАШ КЛЮЧ RapidAPI
+const RAPID_API_HOST = "gemini-pro-ai.p.rapidapi.com";
+const RAPID_API_URL = `https://${RAPID_API_HOST}/`;
 
 /**
  * Переключает видимость контейнера чат-бота.
@@ -135,21 +136,25 @@ async function getAbsurdAnswer(userQuestion) {
   // Добавляем временное сообщение о загрузке
   addMessage("Думаю над абсурдным ответом...", "bot");
   
-  const prompt = `Ответь на вопрос пользователя, но так, чтобы это было максимально абсурдно, нелепо и сюрреалистично. Вопрос: "${userQuestion}"`;
+  // Обновленный промпт для более психоделичных и смешных ответов
+  const prompt = `Ответь на вопрос пользователя так, чтобы это было максимально абсурдно, психоделично и смешно. Используй сюрреалистичные образы и нелепую логику. Вопрос: "${userQuestion}"`;
 
   const payload = {
     contents: [
       {
+        role: "user",
         parts: [{ text: prompt }]
       }
-    ],
+    ]
   };
 
   try {
-    const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+    const response = await fetch(RAPID_API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-rapidapi-key": RAPID_API_KEY,
+        "x-rapidapi-host": RAPID_API_HOST,
       },
       body: JSON.stringify(payload),
     });
