@@ -1,343 +1,192 @@
-:root {
-  --bg: #0b0b0f;
-  --panel: #15151c;
-  --text: #e9e9ee;
-  --accent: #ff3c8e;
-  --accent-2: #7df9ff;
-  --radius: 18px;
-  --shadow: 0 10px 30px rgba(0,0,0,.35);
-  --chat-panel: #202028; /* Новый цвет для чата */
-  --chat-bg: #2b2b34; /* Новый цвет для фона чата */
+"use strict";
+
+// Массив с жанрами
+const genres = {
+  absurd: "Абсурд",
+  horror: "Ужасы",
+  kids: "Детское",
+  romance: "Романтика",
+  sex: "18+",
+  street: "Улица"
+};
+
+// Получение элементов DOM
+const genreButtonsDiv = document.getElementById("genre-buttons");
+const phraseBox = document.getElementById("phrase-box");
+const nextBtn = document.getElementById("next-btn");
+const mainContainer = document.getElementById("main-container");
+
+// Элементы чата
+const chatToggleBtn = document.getElementById("chat-toggle-btn");
+const chatContainer = document.getElementById("chat-container");
+const closeChatBtn = document.getElementById("close-chat-btn");
+const chatBody = document.getElementById("chat-body");
+const chatInput = document.getElementById("chat-input");
+const sendBtn = document.getElementById("send-btn");
+
+let phrases = [];
+let currentIndex = 0;
+
+// Инициализация кнопок жанров
+Object.entries(genres).forEach(([key, label]) => {
+  const btn = document.createElement("button");
+  btn.textContent = label;
+  btn.className = "genre-btn";
+  btn.addEventListener("click", () => loadGenre(key));
+  genreButtonsDiv.appendChild(btn);
+});
+
+function setActiveGenreButton(key) {
+  document.querySelectorAll(".genre-btn").forEach(b => {
+    b.classList.toggle("active", b.textContent.trim() === genres[key]);
+  });
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-rendering: optimizeLegibility;
-  flex-direction: column; /* Добавил, чтобы футер был внизу */
+function revealPhrase(text) {
+  phraseBox.innerHTML = `<span class="typewriter"><span class="typewriter-text">${text}</span></span>`;
+  phraseBox.classList.remove("reveal");
+  void phraseBox.offsetWidth;
+  phraseBox.classList.add("reveal");
+  if (navigator.vibrate) navigator.vibrate(10);
 }
 
-.container {
-  width: min(900px, 96vw);
-  margin: 20px auto;
-  padding: 36px 24px 36px 24px;
-  background: rgba(21,21,28,0.88);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  text-align: center;
-  position: relative;
+// Асинхронная загрузка фраз
+async function loadGenre(genreKey) {
+  try {
+    setActiveGenreButton(genreKey);
+    const res = await fetch(`data/${genreKey}.json`, { cache: "no-store" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (!Array.isArray(data)) throw new Error("Неверный формат JSON");
+    phrases = data;
+    currentIndex = 0;
+    revealPhrase(phrases[currentIndex]);
+    nextBtn.style.display = "inline-block";
+  } catch (err) {
+    console.error("Ошибка загрузки:", err);
+    phraseBox.innerHTML = `Ошибка загрузки фраз. Попробуйте другой жанр.`;
+    nextBtn.style.display = "none";
+  }
 }
 
-/* Новые стили для скрытых разделов и списков */
-.hidden-section {
-  display: none;
-}
-.hidden-section.active {
-  display: block;
+nextBtn.addEventListener("click", () => {
+  if (phrases.length > 0) {
+    currentIndex = (currentIndex + 1) % phrases.length;
+    revealPhrase(phrases[currentIndex]);
+  }
+});
+
+// Навигация между разделами
+document.querySelectorAll('a[data-target]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId = e.target.getAttribute('data-target');
+    showSection(targetId);
+  });
+});
+
+function showSection(targetId) {
+  // Скрыть все разделы
+  document.querySelectorAll('.container').forEach(section => {
+    section.classList.add('hidden-section');
+    section.classList.remove('active');
+  });
+
+  // Показать нужный раздел
+  let sectionToShow;
+  if (targetId === 'main') {
+    sectionToShow = mainContainer;
+  } else {
+    sectionToShow = document.getElementById(targetId + '-section');
+  }
+
+  if (sectionToShow) {
+    sectionToShow.classList.remove('hidden-section');
+    sectionToShow.classList.add('active');
+  }
 }
 
-ul {
-  text-align: left;
-  list-style: none;
-  padding-left: 0;
-}
-ul li::before {
-  content: "•";
-  color: var(--accent);
-  display: inline-block;
-  width: 1em;
-  margin-left: -1em;
+// Логика чат-бота
+function addMessage(text, isUser) {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `chat-message ${isUser ? 'user' : 'bot'}`;
+  messageDiv.innerHTML = text; // Используем innerHTML для форматирования
+  chatBody.appendChild(messageDiv);
+  chatBody.scrollTop = chatBody.scrollHeight; // Прокрутка вниз
 }
 
-h1, .neon {
-  font-size: clamp(38px, 7vw, 74px);
-  color: var(--accent-2);
-  font-weight: 900;
-  letter-spacing: .04em;
-  text-shadow:
-    0 0 16px var(--accent-2),
-    0 0 64px var(--accent-2),
-    0 0 4px #fff,
-    0 0 60px var(--accent);
-  animation: neon-pulse 2.8s infinite alternate cubic-bezier(.68,.13,.81,.99);
+async function handleBotResponse(message) {
+  // Показать сообщение о том, что бот думает
+  const loadingMessage = document.createElement('div');
+  loadingMessage.className = 'chat-message bot';
+  loadingMessage.id = 'loading-message';
+  loadingMessage.textContent = 'Абсурд-бот думает...';
+  chatBody.appendChild(loadingMessage);
+  chatBody.scrollTop = chatBody.scrollHeight;
+
+  try {
+    // Формируем промпт для LLM, чтобы он отвечал в абсурдном стиле
+    const prompt = `Ответь на следующий вопрос в абсурдном, нелогичном, но смешном стиле. Твой ответ должен быть не более двух предложений.\nВопрос пользователя: "${message}"`;
+    
+    let chatHistory = [];
+    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+    const payload = { contents: chatHistory };
+    const apiKey = "";
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    
+    // Удаляем сообщение о загрузке
+    loadingMessage.remove();
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    const botReply = result.candidates[0].content.parts[0].text;
+    
+    // Добавляем ответ бота в чат
+    addMessage(botReply, false);
+
+  } catch (error) {
+    console.error("Ошибка при получении ответа от бота:", error);
+    loadingMessage.remove(); // Удаляем сообщение о загрузке, даже если произошла ошибка
+    addMessage("Произошла ошибка. Я слишком занят, пытаясь понять, почему тостер не разговаривает со мной.", false);
+  }
 }
 
-@keyframes neon-pulse {
-  0% { text-shadow: 0 0 32px var(--accent-2), 0 0 100px var(--accent); }
-  100% { text-shadow: 0 0 20px var(--accent-2), 0 0 60px var(--accent), 0 0 8px #fff; }
-}
+sendBtn.addEventListener('click', () => {
+  const userMessage = chatInput.value.trim();
+  if (userMessage) {
+    addMessage(userMessage, true);
+    chatInput.value = '';
+    handleBotResponse(userMessage);
+  }
+});
 
-.genres {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-  justify-content: center;
-  margin: 30px 0 26px;
-}
+chatInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    sendBtn.click();
+  }
+});
 
-.genre-btn {
-  background: rgba(255,255,255,0.04);
-  color: var(--text);
-  border: 2px solid var(--accent);
-  border-radius: 999px;
-  padding: 13px 26px;
-  font-size: 18px;
-  cursor: pointer;
-  transition: 0.23s cubic-bezier(.83,-0.12,.62,1.15);
-  font-weight: 600;
-  box-shadow: 0 2px 24px 0 rgba(255,255,255,0.13);
-  outline: none;
-}
-.genre-btn:hover,
-.genre-btn.active {
-  background: linear-gradient(90deg, var(--accent-2) 0%, var(--accent) 100%);
-  color: #fff;
-  border-color: var(--accent-2);
-  box-shadow: 0 0 20px var(--accent-2), 0 0 10px var(--accent);
-  text-shadow: 0 0 8px var(--accent-2);
-  transform: translateY(-2px) scale(1.04);
-}
+// Управление видимостью чата
+chatToggleBtn.addEventListener('click', () => {
+  chatContainer.classList.add('open');
+  chatBody.scrollTop = chatBody.scrollHeight;
+});
 
-.phrase-box {
-  background: rgba(255,255,255,0.08);
-  border-radius: calc(var(--radius) - 4px);
-  padding: 30px 18px;
-  font-size: clamp(20px, 2.7vw, 32px);
-  min-height: 110px;
-  margin-bottom: 30px;
-  color: #fff;
-  box-shadow: var(--shadow);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  line-height: 1.4;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  overflow-x: auto;
-  position: relative;
-  transition: box-shadow .22s;
-}
+closeChatBtn.addEventListener('click', () => {
+  chatContainer.classList.remove('open');
+});
 
-.new-phrase-btn {
-  background: var(--accent-2);
-  border: none;
-  padding: 16px 36px;
-  border-radius: 999px;
-  color: #061214;
-  font-weight: bold;
-  font-size: 20px;
-  cursor: pointer;
-  box-shadow: 0 0 28px var(--accent-2);
-  transition: 0.18s cubic-bezier(.83,-0.12,.62,1.15);
-}
-.new-phrase-btn:hover {
-  background: var(--accent);
-  color: #fff;
-  box-shadow: 0 0 22px var(--accent);
-}
-
-.reveal {
-  animation: fadeUp .44s cubic-bezier(.86,.15,.71,1.02) forwards;
-}
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px) scale(.98);}
-  to { opacity: 1; transform: none; }
-}
-
-/* Для крупных фраз и мобильных — уменьшить размер */
-@media (max-width: 640px) {
-  .container { padding: 12vw 2vw; width: 99vw;}
-  .phrase-box { font-size: 17px; padding: 18px 3vw; min-height: 76px;}
-  .genres { gap: 10px; }
-}
-
-/* Типографика для переносов */
-.phrase-box, .typewriter-text {
-  white-space: pre-wrap;
-  word-break: break-word;
-  overflow-wrap: break-word;
-}
-
-/* Плавные переходы и отключение анимаций при reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  *, *:before, *:after { animation: none !important; transition: none !important; }
-}
-
-/* Новые стили для футера */
-.footer {
-  width: 100%;
-  text-align: center;
-  margin-top: auto;
-  padding: 20px 0;
-}
-
-.footer-links a {
-  color: var(--text);
-  text-decoration: none;
-  font-size: 14px;
-  margin: 0 10px;
-  opacity: 0.7;
-  transition: opacity 0.2s ease-in-out;
-}
-.footer-links a:hover {
-  opacity: 1;
-  color: var(--accent-2);
-}
-
-.back-link {
-  display: inline-block;
-  margin-top: 30px;
-  color: var(--accent-2);
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.2s ease-in-out;
-}
-.back-link:hover {
-  color: var(--accent);
-}
-
-
-/* Стили для ЧАТА */
-.chat-toggle-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  padding: 15px 25px;
-  border-radius: 999px;
-  cursor: pointer;
-  box-shadow: 0 0 28px var(--accent);
-  z-index: 1000;
-  transition: 0.2s;
-}
-.chat-toggle-btn:hover {
-  box-shadow: 0 0 40px var(--accent);
-  transform: translateY(-2px);
-}
-
-.chat-container {
-  position: fixed;
-  bottom: 80px;
-  right: 20px;
-  width: min(380px, 90vw);
-  height: 500px;
-  background: var(--panel);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
-  z-index: 999;
-  transform: scale(0.8) translateY(20px);
-  opacity: 0;
-  pointer-events: none;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
-}
-.chat-container.open {
-  transform: scale(1) translateY(0);
-  opacity: 1;
-  pointer-events: all;
-}
-
-.chat-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
-  background: rgba(21, 21, 28, 0.9);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  border-top-left-radius: var(--radius);
-  border-top-right-radius: var(--radius);
-  font-weight: bold;
-}
-.chat-header button {
-  background: transparent;
-  border: none;
-  font-size: 24px;
-  font-weight: bold;
-  color: var(--text);
-  cursor: pointer;
-  padding: 0;
-}
-
-.chat-body {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  scroll-behavior: smooth;
-}
-.chat-body::-webkit-scrollbar {
-  width: 8px;
-}
-.chat-body::-webkit-scrollbar-track {
-  background: transparent;
-}
-.chat-body::-webkit-scrollbar-thumb {
-  background-color: var(--accent);
-  border-radius: 10px;
-}
-
-.chat-message {
-  padding: 10px 15px;
-  border-radius: 18px;
-  max-width: 80%;
-  word-wrap: break-word;
-  font-size: 14px;
-  line-height: 1.4;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-.chat-message.user {
-  background: var(--accent);
-  color: #061214;
-  align-self: flex-end;
-  border-bottom-right-radius: 2px;
-}
-.chat-message.bot {
-  background: var(--accent-2);
-  color: #061214;
-  align-self: flex-start;
-  border-bottom-left-radius: 2px;
-}
-.chat-message.bot strong {
-  color: #ff3c8e;
-}
-
-.chat-input-area {
-  display: flex;
-  padding: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-.chat-input-area input {
-  flex-grow: 1;
-  padding: 10px 15px;
-  border-radius: 999px;
-  border: none;
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text);
-  margin-right: 10px;
-  outline: none;
-}
-.chat-input-area button {
-  background: var(--accent-2);
-  border: none;
-  padding: 8px 18px;
-  border-radius: 999px;
-  color: #061214;
-  cursor: pointer;
-  transition: 0.2s;
-}
-.chat-input-area button:hover {
-  background: var(--accent);
-  color: #fff;
-}
+// Инициализация при загрузке: убедиться, что виден главный контейнер
+document.addEventListener('DOMContentLoaded', () => {
+  showSection('main');
+  addMessage("Привет! Я Абсурд-бот. Задайте мне самый странный вопрос, который придёт вам в голову.", false);
+});
