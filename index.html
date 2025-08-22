@@ -2,73 +2,286 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Абсурдная Игра</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Абсурдная Игра - Генератор Веселых Фраз</title>
+  <meta name="description" content="Веселая игра с абсурдными фразами и заданиями разных жанров">
+  
+  <!-- Google AdSense -->
   <meta name="google-adsense-account" content="ca-pub-8922825157298560">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="manifest" href="manifest.json">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8922825157298560" crossorigin="anonymous"></script>
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1a1a2e">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
-  <div class="container" id="main-container">
-    <h1 class="neon">Абсурдная Игра</h1>
-    <div class="genres" id="genre-buttons"></div>
-    <div class="phrase-box" id="phrase-box">Выберите жанр, чтобы начать</div>
-    <button class="new-phrase-btn" id="next-btn" style="display:none">Следующая фраза</button>
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loading-screen">
+    <div class="loading-spinner"></div>
+    <p>Загружаем абсурд...</p>
   </div>
 
-  <!-- Дополнительные разделы -->
-  <div class="container hidden-section" id="about-section">
-    <h1 class="neon">О нас</h1>
-    <p>«Абсурдная Игра» — это проект, созданный с целью повеселиться и развлечься, генерируя самые нелепые и неожиданные фразы. Мы верим, что абсурд и юмор делают жизнь ярче.</p>
-    <a href="#" class="back-link" data-target="main">Вернуться к игре</a>
-  </div>
-  <div class="container hidden-section" id="contacts-section">
-    <h1 class="neon">Контакты</h1>
-    <p>По всем вопросам и предложениям:</p>
-    <p><strong>Имя:</strong> Алексей</p>
-    <p><strong>Email:</strong> a321245250@gmail.com</p>
-    <a href="#" class="back-link" data-target="main">Вернуться к игре</a>
-  </div>
-  <div class="container hidden-section" id="rules-section">
-    <h1 class="neon">Правила игры</h1>
-    <ul>
-      <li>Выберите жанр.</li>
-      <li>Прочитайте фразу.</li>
-      <li>Нажмите «Следующая фраза», чтобы получить новую.</li>
-      <li>Наслаждайтесь абсурдом!</li>
-    </ul>
-    <a href="#" class="back-link" data-target="main">Вернуться к игре</a>
-  </div>
-  <div class="container hidden-section" id="privacy-section">
-    <h1 class="neon">Политика конфиденциальности</h1>
-    <p>Мы не собираем персональные данные. Приложение работает полностью на стороне клиента, анализ только обезличенный (Google Analytics, AdSense).</p>
-    <a href="#" class="back-link" data-target="main">Вернуться к игре</a>
+  <!-- Main Game Container -->
+  <main class="container" id="main-container">
+    <header class="game-header">
+      <h1 class="neon-title">Абсурдная Игра</h1>
+      <p class="subtitle">Генератор веселых фраз и заданий</p>
+    </header>
+
+    <!-- Genre Selection -->
+    <section class="genre-section" id="genre-section">
+      <h2 class="section-title">Выберите жанр:</h2>
+      <div class="genres-grid" id="genre-buttons">
+        <!-- Genres will be loaded dynamically -->
+      </div>
+    </section>
+
+    <!-- Game Area -->
+    <section class="game-area" id="game-area" style="display: none;">
+      <div class="current-genre" id="current-genre"></div>
+      
+      <div class="phrase-container">
+        <div class="phrase-box" id="phrase-box">
+          <div class="phrase-text" id="phrase-text">Выберите жанр для начала игры</div>
+        </div>
+      </div>
+
+      <div class="game-controls">
+        <button class="btn btn-primary" id="next-btn" style="display: none;">
+          <span>Следующая фраза</span>
+          <div class="btn-icon">🎲</div>
+        </button>
+        
+        <button class="btn btn-secondary" id="back-to-genres" style="display: none;">
+          <span>Выбрать другой жанр</span>
+          <div class="btn-icon">🔄</div>
+        </button>
+      </div>
+
+      <!-- Stats -->
+      <div class="game-stats" id="game-stats" style="display: none;">
+        <div class="stat">
+          <span class="stat-label">Фраз сгенерировано:</span>
+          <span class="stat-value" id="phrases-count">0</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- About Section -->
+  <section class="page-section hidden-section" id="about-section">
+    <div class="container">
+      <header class="section-header">
+        <h1 class="neon-title">О проекте</h1>
+      </header>
+      
+      <div class="content-block">
+        <p>«Абсурдная Игра» — это интерактивный генератор веселых фраз и заданий, созданный для развлечения и хорошего настроения.</p>
+        
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🎭</div>
+            <h3>Разные жанры</h3>
+            <p>От детских загадок до взрослого юмора</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">🎲</div>
+            <h3>Случайность</h3>
+            <p>Каждая фраза — сюрприз!</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3>Мобильная версия</h3>
+            <p>Играйте в любом месте</p>
+          </div>
+        </div>
+      </div>
+      
+      <button class="btn btn-back back-link" data-target="main">
+        <span>Вернуться к игре</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Rules Section -->
+  <section class="page-section hidden-section" id="rules-section">
+    <div class="container">
+      <header class="section-header">
+        <h1 class="neon-title">Правила игры</h1>
+      </header>
+      
+      <div class="content-block">
+        <div class="rules-list">
+          <div class="rule-item">
+            <div class="rule-number">1</div>
+            <div class="rule-content">
+              <h3>Выберите жанр</h3>
+              <p>Кликните на понравившийся жанр из списка</p>
+            </div>
+          </div>
+          
+          <div class="rule-item">
+            <div class="rule-number">2</div>
+            <div class="rule-content">
+              <h3>Читайте фразы</h3>
+              <p>Наслаждайтесь абсурдными фразами и заданиями</p>
+            </div>
+          </div>
+          
+          <div class="rule-item">
+            <div class="rule-number">3</div>
+            <div class="rule-content">
+              <h3>Получайте новые</h3>
+              <p>Нажимайте "Следующая фраза" для новых вариантов</p>
+            </div>
+          </div>
+          
+          <div class="rule-item">
+            <div class="rule-number">4</div>
+            <div class="rule-content">
+              <h3>Веселитесь!</h3>
+              <p>Главное правило — получать удовольствие от абсурда</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <button class="btn btn-back back-link" data-target="main">
+        <span>Вернуться к игре</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Contacts Section -->
+  <section class="page-section hidden-section" id="contacts-section">
+    <div class="container">
+      <header class="section-header">
+        <h1 class="neon-title">Контакты</h1>
+      </header>
+      
+      <div class="content-block">
+        <div class="contact-card">
+          <div class="contact-info">
+            <h3>Связаться с разработчиком:</h3>
+            <div class="contact-item">
+              <strong>Имя:</strong> Алексей
+            </div>
+            <div class="contact-item">
+              <strong>Email:</strong> 
+              <a href="mailto:a321245250@gmail.com">a321245250@gmail.com</a>
+            </div>
+          </div>
+          
+          <div class="contact-form">
+            <h3>Быстрое сообщение:</h3>
+            <div class="form-group">
+              <input type="email" id="contact-email" placeholder="Ваш email" class="form-input">
+            </div>
+            <div class="form-group">
+              <textarea id="contact-message" placeholder="Ваше сообщение" class="form-textarea"></textarea>
+            </div>
+            <button class="btn btn-primary" id="send-message">Отправить</button>
+          </div>
+        </div>
+      </div>
+      
+      <button class="btn btn-back back-link" data-target="main">
+        <span>Вернуться к игре</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Privacy Section -->
+  <section class="page-section hidden-section" id="privacy-section">
+    <div class="container">
+      <header class="section-header">
+        <h1 class="neon-title">Конфиденциальность</h1>
+      </header>
+      
+      <div class="content-block">
+        <div class="privacy-content">
+          <h3>Наша политика:</h3>
+          <ul>
+            <li>🔒 Мы не собираем персональные данные</li>
+            <li>📱 Приложение работает локально в браузере</li>
+            <li>📊 Используется только анонимная аналитика (Google Analytics)</li>
+            <li>🎯 Показ рекламы через Google AdSense</li>
+            <li>🍪 Минимальное использование cookies</li>
+          </ul>
+          
+          <p>Все данные игры хранятся локально в вашем браузере и не передаются на сервер.</p>
+        </div>
+      </div>
+      
+      <button class="btn btn-back back-link" data-target="main">
+        <span>Вернуться к игре</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Chat Bot -->
+  <div class="chat-widget">
+    <button class="chat-toggle-btn" id="chat-toggle-btn" title="Задать вопрос боту">
+      <span class="chat-icon">💬</span>
+      <span class="chat-text">Абсурд-бот</span>
+    </button>
+    
+    <div class="chat-container" id="chat-container">
+      <div class="chat-header">
+        <div class="chat-title">
+          <span class="bot-avatar">🤖</span>
+          <span>Абсурд-бот</span>
+        </div>
+        <button class="chat-close" id="close-chat-btn">&times;</button>
+      </div>
+      
+      <div class="chat-body" id="chat-body">
+        <div class="chat-message bot-message">
+          Привет! Я помогу тебе с игрой. Задавай вопросы! 🎲
+        </div>
+      </div>
+      
+      <div class="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Спросите что-нибудь абсурдное..." maxlength="500">
+        <button id="send-chat-btn" class="chat-send-btn">📤</button>
+      </div>
+    </div>
   </div>
 
-  <footer class="footer">
-    <div class="footer-links">
-      <a href="#" data-target="about">О нас</a>
-      <a href="#" data-target="contacts">Контакты</a>
-      <a href="#" data-target="rules">Правила игры</a>
-      <a href="#" data-target="privacy">Политика конфиденциальности</a>
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="#" class="footer-link" data-target="about">О нас</a>
+        <a href="#" class="footer-link" data-target="rules">Правила</a>
+        <a href="#" class="footer-link" data-target="contacts">Контакты</a>
+        <a href="#" class="footer-link" data-target="privacy">Конфиденциальность</a>
+      </div>
+      
+      <div class="footer-info">
+        <p>&copy; 2024 Абсурдная Игра. Создано с любовью к абсурду ❤️</p>
+      </div>
     </div>
   </footer>
-  
-  <button class="chat-toggle-btn" id="chat-toggle-btn">💬</button>
 
-  <div class="chat-container" id="chat-container">
-    <div class="chat-header">
-      Абсурд-бот
-      <button id="close-chat-btn">×</button>
-    </div>
-    <div class="chat-body" id="chat-body"></div>
-    <div class="chat-input-area">
-      <input type="text" id="chat-input" placeholder="Введите ваш абсурдный вопрос...">
-      <button id="send-btn">Отправить</button>
-    </div>
-  </div>
-
+  <!-- Scripts -->
   <script src="js/app.js" defer></script>
+  
+  <!-- AdSense Ad Units (Примеры) -->
+  <div class="ad-container" id="ad-top" style="display: none;">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-8922825157298560"
+         data-ad-slot="1234567890"
+         data-ad-format="auto"></ins>
+  </div>
 </body>
 </html>
