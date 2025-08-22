@@ -186,25 +186,57 @@ async function getAbsurdResponse(prompt) {
     }
   }
 }
+async function getGeminiResponse(prompt) {
+  const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBEwUcxAfqJ9SxLXwEfbJ8EtkCtSJoMTeQ';
 
-/**
- * Sends a prompt to the RapidAPI GPT endpoint and returns the response.
- * @param {string} prompt The user's prompt.
- * @returns {Promise<string>} The response from the model.
- */
-async function getRapidApiGPTResponse(prompt) {
-  const url = 'https://chat-gpt26.p.rapidapi.com/';
   const options = {
     method: 'POST',
     headers: {
-      'x-rapidapi-key': 'bb6ec1b4e4msh01b6b1ffd9a09f5p111d1fjsn9c51ef8e768c',
-      'x-rapidapi-host': 'chat-gpt26.p.rapidapi.com',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      model: 'GPT-5-mini',
-      messages: [{ role: 'user', content: prompt }]
+      contents: [
+        {
+          parts: [
+            {
+              text: `From now on, you must respond only in absurd, surreal, or nonsensical ways.  logic. No coherence. Just absurdity. Now respond to this: "${prompt}"`
+            }
+          ]
+        }
+      ]
     })
+  };
+
+  console.log('Sending request to Gemini API with prompt:', prompt);
+  console.log('Request options:', options);
+
+  try {
+    const response = await fetch(url, options);
+    console.log('Raw response:', response);
+
+    const data = await response.json();
+    console.log('Parsed response data:', data);
+
+    if (
+      data &&
+      Array.isArray(data.candidates) &&
+      data.candidates.length > 0 &&
+      data.candidates[0].content &&
+      Array.isArray(data.candidates[0].content.parts) &&
+      data.candidates[0].content.parts.length > 0 &&
+      typeof data.candidates[0].content.parts[0].text === 'string'
+    ) {
+      console.log('Returning response text:', data.candidates[0].content.parts[0].text);
+      return data.candidates[0].content.parts[0].text;
+    } else {
+      console.warn('No valid response found');
+      return 'No response';
+    }
+  } catch (error) {
+    console.error('Error fetching Gemini response:', error);
+    return 'Error occurred';
+  }
+}
   };
 
   try {
