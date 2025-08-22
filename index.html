@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Абсурдная Игра</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -13,6 +13,27 @@
     <div class="phrase-box" id="phrase-box">Выберите жанр, чтобы начать</div>
     <button class="new-phrase-btn" id="next-btn" style="display:none">Следующая фраза</button>
   </div>
+  
+  <!-- Кнопка для открытия чата -->
+  <button class="chat-toggle-btn" id="chat-toggle-btn">
+    Запустить Абсурд-бота
+  </button>
+
+  <!-- Контейнер чата (изначально скрыт) -->
+  <div class="chat-container" id="chat-container">
+    <div class="chat-header">
+      Абсурд-бот
+      <button id="close-chat-btn">×</button>
+    </div>
+    <div class="chat-body" id="chat-body">
+      <!-- Здесь будут сообщения -->
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chat-input" placeholder="Введите ваш абсурдный вопрос...">
+      <button id="send-btn">Отправить</button>
+    </div>
+  </div>
+
   <script src="js/app.js" defer></script>
 </body>
 </html>
