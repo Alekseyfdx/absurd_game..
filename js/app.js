@@ -1,13 +1,13 @@
 "use strict";
 
 /**
- * Absurd Game App
- * This script combines the original game logic for displaying absurd phrases
- * with a new chatbot functionality powered by the Gemini API.
+ * Абсурдная Игра
+ * Этот скрипт объединяет логику игры с фразами и функциональность
+ * нового чат-бота, работающего на базе Gemini API.
  */
 
 // =========================================================================
-// Original Game Logic (Phrases & Genre Buttons)
+// Игровая логика (фразы и кнопки жанров)
 // =========================================================================
 
 const genres = {
@@ -19,6 +19,7 @@ const genres = {
   street: "Улица"
 };
 
+// Получаем элементы DOM
 const genreButtonsDiv = document.getElementById("genre-buttons");
 const phraseBox = document.getElementById("phrase-box");
 const nextBtn = document.getElementById("next-btn");
@@ -27,8 +28,8 @@ let phrases = [];
 let currentIndex = 0;
 
 /**
- * Sets the active state for the selected genre button.
- * @param {string} key - The genre key to activate.
+ * Устанавливает активное состояние для выбранной кнопки жанра.
+ * @param {string} key - Ключ жанра для активации.
  */
 function setActiveGenreButton(key) {
   document.querySelectorAll(".genre-btn").forEach(b => {
@@ -37,20 +38,20 @@ function setActiveGenreButton(key) {
 }
 
 /**
- * Reveals a new phrase with a typewriter and fade-up animation.
- * @param {string} text - The phrase text to display.
+ * Показывает новую фразу с эффектом печатающей машинки.
+ * @param {string} text - Текст фразы для отображения.
  */
 function revealPhrase(text) {
   phraseBox.innerHTML = `<span class="typewriter"><span class="typewriter-text">${text}</span></span>`;
   phraseBox.classList.remove("reveal");
-  void phraseBox.offsetWidth; // Trigger reflow to restart animation
+  void phraseBox.offsetWidth; // Триггер для перезапуска анимации
   phraseBox.classList.add("reveal");
   if (navigator.vibrate) navigator.vibrate(10);
 }
 
 /**
- * Loads phrases from a JSON file based on the selected genre.
- * @param {string} genreKey - The key for the selected genre.
+ * Загружает фразы из JSON-файла на основе выбранного жанра.
+ * @param {string} genreKey - Ключ выбранного жанра.
  */
 async function loadGenre(genreKey) {
   try {
@@ -70,10 +71,10 @@ async function loadGenre(genreKey) {
 }
 
 // =========================================================================
-// Chatbot Logic
+// Логика чат-бота
 // =========================================================================
 
-// HTML elements for the chatbot
+// Элементы HTML для чат-бота
 const chatToggleBtn = document.getElementById("chat-toggle-btn");
 const chatContainer = document.getElementById("chat-container");
 const closeChatBtn = document.getElementById("close-chat-btn");
@@ -81,21 +82,21 @@ const chatBody = document.getElementById("chat-body");
 const chatInput = document.getElementById("chat-input");
 const sendBtn = document.getElementById("send-btn");
 
-// Gemini API configuration (API key provided by the environment)
-const GEMINI_API_KEY = ""; // Your API key will be provided at runtime
+// Конфигурация Gemini API
+const GEMINI_API_KEY = ""; // Ключ API будет предоставлен во время выполнения
 const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent";
 
 /**
- * Toggles the visibility of the chatbot container.
+ * Переключает видимость контейнера чат-бота.
  */
 function toggleChat() {
   chatContainer.classList.toggle("open");
 }
 
 /**
- * Adds a message to the chat display and scrolls to the bottom.
- * @param {string} text - The message text.
- * @param {string} sender - "user" or "bot".
+ * Добавляет сообщение в чат и прокручивает его вниз.
+ * @param {string} text - Текст сообщения.
+ * @param {string} sender - "user" или "bot".
  */
 function addMessage(text, sender) {
   const messageElement = document.createElement("div");
@@ -115,7 +116,7 @@ function addMessage(text, sender) {
 }
 
 /**
- * Handles user message submission.
+ * Обрабатывает отправку сообщения от пользователя.
  */
 function handleSendMessage() {
   const userMessage = chatInput.value.trim();
@@ -127,11 +128,11 @@ function handleSendMessage() {
 }
 
 /**
- * Sends a request to the Gemini API for an absurd response.
- * @param {string} userQuestion - The user's question.
+ * Отправляет запрос к Gemini API для получения абсурдного ответа.
+ * @param {string} userQuestion - Вопрос пользователя.
  */
 async function getAbsurdAnswer(userQuestion) {
-  // Add a temporary loading message
+  // Добавляем временное сообщение о загрузке
   addMessage("Думаю над абсурдным ответом...", "bot");
   
   const prompt = `Ответь на вопрос пользователя, но так, чтобы это было максимально абсурдно, нелепо и сюрреалистично. Вопрос: "${userQuestion}"`;
@@ -160,25 +161,25 @@ async function getAbsurdAnswer(userQuestion) {
     const data = await response.json();
     const absurdAnswer = data.candidates[0].content.parts[0].text;
     
-    // Remove the previous loading message
+    // Удаляем предыдущее сообщение о загрузке
     chatBody.lastChild.remove();
     addMessage(absurdAnswer, "bot");
 
   } catch (error) {
-    console.error("Error calling Gemini API:", error);
+    console.error("Ошибка при вызове Gemini API:", error);
     addMessage("Произошла какая-то абсурдная ошибка с API...", "bot");
   }
 }
 
 // =========================================================================
-// Initialization and Event Listeners
+// Инициализация и обработчики событий
 // =========================================================================
 
 /**
- * Initializes the application by setting up event listeners.
+ * Инициализирует приложение, настраивая обработчики событий.
  */
 function init() {
-  // Set up game genre buttons
+  // Настраиваем кнопки жанров
   Object.entries(genres).forEach(([key, label]) => {
     const btn = document.createElement("button");
     btn.textContent = label;
@@ -187,14 +188,14 @@ function init() {
     genreButtonsDiv.appendChild(btn);
   });
 
-  // Event listener for the "Next phrase" button
+  // Обработчик события для кнопки "Следующая фраза"
   nextBtn.addEventListener("click", () => {
     if (!phrases.length) return;
     currentIndex = (currentIndex + 1) % phrases.length;
     revealPhrase(phrases[currentIndex]);
   });
 
-  // Event listeners for the chatbot
+  // Обработчики событий для чат-бота
   chatToggleBtn.addEventListener("click", toggleChat);
   closeChatBtn.addEventListener("click", toggleChat);
   sendBtn.addEventListener("click", handleSendMessage);
@@ -204,9 +205,9 @@ function init() {
     }
   });
 
-  // Initial greeting from the bot
+  // Первое приветствие от бота
   addMessage("Абсурд-бот к вашим услугам! Задавайте вопросы.", "bot");
 }
 
-// Start the application when the window loads
+// Запускаем приложение, когда окно загрузится
 window.onload = init;
