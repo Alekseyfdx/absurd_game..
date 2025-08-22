@@ -132,7 +132,7 @@ function handleSendMessage() {
  */
 async function getAbsurdAnswer(userQuestion) {
   // Add a temporary loading message
-  const loadingMessage = addMessage("Бот: Думаю над абсурдным ответом...", "bot");
+  addMessage("Думаю над абсурдным ответом...", "bot");
   
   const prompt = `Ответь на вопрос пользователя, но так, чтобы это было максимально абсурдно, нелепо и сюрреалистично. Вопрос: "${userQuestion}"`;
 
@@ -160,8 +160,8 @@ async function getAbsurdAnswer(userQuestion) {
     const data = await response.json();
     const absurdAnswer = data.candidates[0].content.parts[0].text;
     
-    // Remove the loading message and add the final response
-    loadingMessage.remove(); // This is the old way, a better way is to use a specific ID
+    // Remove the previous loading message
+    chatBody.lastChild.remove();
     addMessage(absurdAnswer, "bot");
 
   } catch (error) {
