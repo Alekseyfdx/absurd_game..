@@ -6,6 +6,7 @@
   <!-- Главная -->
   <url>
     <loc>https://absudia.com/</loc>
+    <meta name="google-adsense-account" content="ca-pub-8922825157298560">
     <lastmod>2025-08-23</lastmod>
     <xhtml:link rel="alternate" hreflang="ru" href="https://absudia.com/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://absudia.com/"/>
@@ -49,3 +50,4 @@
   </url>
 
 </urlset>
+
