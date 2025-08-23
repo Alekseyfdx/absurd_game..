@@ -2,28 +2,28 @@
 
 /* ==========================================
    АБСУРДНАЯ ИГРА - JAVASCRIPT 2024
+   Версия для многостраничной архитектуры
    ========================================== */
 
 // ======= НАСТРОЙКИ =======
 const CONFIG = {
   GEMINI_API_KEY: "AIzaSyBEwUcxAfqJ9SxLXwEfbJ8EtkCtSJoMTeQ", // Замени на свой ключ
   LOADING_DELAY: 1000, // Минимальное время загрузки (мс)
-  TYPEWRITER_SPEED: 50, // Скорость печатания (мс)
   MAX_CHAT_MESSAGES: 50, // Максимум сообщений в чате
   VIBRATION_ENABLED: true, // Вибрация на мобильных
 };
 
 // ======= ДАННЫЕ ЖАНРОВ =======
 const genres = {
-  kids: { name: "Детское", emoji: "🧸", description: "Веселые детские вопросы" },
-  absurd: { name: "Абсурд", emoji: "🤪", description: "Полный бред и нелепица" },
-  horror: { name: "Хоррор", emoji: "👻", description: "Страшные истории" },
-  romance: { name: "Романтика", emoji: "💕", description: "О любви и отношениях" },
+  kids: { name: "Детское", emoji: "🧸", description: "Абсурдные ситуации с детьми" },
+  absurd: { name: "Абсурд", emoji: "🤪", description: "Сюрреалистические истории" },
+  horror: { name: "Хоррор", emoji: "👻", description: "Мистический абсурд" },
+  romance: { name: "Романтика", emoji: "💕", description: "Любовный абсурд" },
   sex: { name: "18+", emoji: "🔞", description: "Только для взрослых" },
-  street: { name: "Уличное", emoji: "🏙️", description: "Из жизни улиц" }
+  street: { name: "Уличное", emoji: "🏙️", description: "Бытовые ситуации" }
 };
 
-// ======= СОСТОЯНИЕ ПРИЛОЖЕНИЯ =======
+// ======= СОСТОЯНИЕ ИГРЫ =======
 class GameState {
   constructor() {
     this.currentGenre = null;
@@ -31,7 +31,6 @@ class GameState {
     this.currentIndex = 0;
     this.phrasesGenerated = 0;
     this.isLoading = false;
-    this.chatMessages = [];
   }
 
   reset() {
@@ -45,10 +44,6 @@ class GameState {
     this.currentIndex = Math.floor(Math.random() * this.phrases.length);
     this.phrasesGenerated++;
     return this.phrases[this.currentIndex];
-  }
-
-  getCurrentPhrase() {
-    return this.phrases[this.currentIndex] || null;
   }
 }
 
@@ -77,12 +72,7 @@ const DOM = {
   closeChatBtn: document.getElementById('close-chat-btn'),
   chatBody: document.getElementById('chat-body'),
   chatInput: document.getElementById('chat-input'),
-  sendChatBtn: document.getElementById('send-chat-btn'),
-  
-  // Contact form
-  contactEmail: document.getElementById('contact-email'),
-  contactMessage: document.getElementById('contact-message'),
-  sendMessage: document.getElementById('send-message')
+  sendChatBtn: document.getElementById('send-chat-btn')
 };
 
 // ======= УТИЛИТЫ =======
@@ -116,14 +106,6 @@ class Utils {
   static toggleClass(element, className) {
     if (element) element.classList.toggle(className);
   }
-
-  static createButton(text, className, onClick) {
-    const btn = document.createElement('button');
-    btn.textContent = text;
-    btn.className = className;
-    btn.addEventListener('click', onClick);
-    return btn;
-  }
 }
 
 // ======= УПРАВЛЕНИЕ ИНТЕРФЕЙСОМ =======
@@ -148,9 +130,6 @@ class UI {
   static showGenreSelection() {
     Utils.showElement(DOM.genreSection, 'block');
     Utils.hideElement(DOM.gameArea);
-    Utils.hideElement(DOM.nextBtn);
-    Utils.hideElement(DOM.backToGenres);
-    Utils.hideElement(DOM.gameStats);
   }
 
   static updateStats() {
@@ -200,54 +179,31 @@ class UI {
     });
   }
 
-  static showError(message, duration = 5000) {
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'error-message';
-    errorDiv.textContent = message;
-    errorDiv.style.cssText = `
+  static showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
       position: fixed;
       top: 20px;
       right: 20px;
-      background: var(--error);
-      color: white;
       padding: 15px 20px;
       border-radius: var(--radius-sm);
-      box-shadow: var(--shadow);
-      z-index: 10000;
-      animation: slideIn 0.3s ease;
-    `;
-
-    document.body.appendChild(errorDiv);
-
-    setTimeout(() => {
-      errorDiv.style.animation = 'slideOut 0.3s ease forwards';
-      setTimeout(() => errorDiv.remove(), 300);
-    }, duration);
-  }
-
-  static showSuccess(message, duration = 3000) {
-    const successDiv = document.createElement('div');
-    successDiv.className = 'success-message';
-    successDiv.textContent = message;
-    successDiv.style.cssText = `
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: var(--success);
       color: white;
-      padding: 15px 20px;
-      border-radius: var(--radius-sm);
-      box-shadow: var(--shadow);
+      font-weight: 600;
       z-index: 10000;
       animation: slideIn 0.3s ease;
+      max-width: 300px;
+      box-shadow: var(--shadow);
+      background: ${type === 'success' ? 'var(--success)' : 'var(--error)'};
     `;
 
-    document.body.appendChild(successDiv);
+    document.body.appendChild(notification);
 
     setTimeout(() => {
-      successDiv.style.animation = 'slideOut 0.3s ease forwards';
-      setTimeout(() => successDiv.remove(), 300);
-    }, duration);
+      notification.style.animation = 'slideOut 0.3s ease forwards';
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
   }
 }
 
@@ -301,7 +257,7 @@ class GameLogic {
 
       // Обновление состояния
       gameState.currentGenre = genreKey;
-      gameState.phrases = data.filter(phrase => phrase && phrase.trim()); // Фильтруем пустые
+      gameState.phrases = data.filter(phrase => phrase && phrase.trim());
       gameState.currentIndex = 0;
 
       // Обновление UI
@@ -316,11 +272,11 @@ class GameLogic {
       }
 
       UI.updateStats();
-      UI.showSuccess(`Загружено фраз: ${gameState.phrases.length}`);
+      UI.showNotification(`Загружено фраз: ${gameState.phrases.length}`);
 
     } catch (error) {
       console.error('Ошибка загрузки жанра:', error);
-      UI.showError(`Ошибка загрузки жанра "${genres[genreKey]?.name}": ${error.message}`);
+      UI.showNotification(`Ошибка загрузки жанра "${genres[genreKey]?.name}": ${error.message}`, 'error');
       UI.showGenreSelection();
     } finally {
       gameState.isLoading = false;
@@ -330,7 +286,7 @@ class GameLogic {
 
   static async nextPhrase() {
     if (gameState.phrases.length === 0) {
-      UI.showError('Нет загруженных фраз');
+      UI.showNotification('Нет загруженных фраз', 'error');
       return;
     }
 
@@ -486,89 +442,6 @@ class ChatBot {
   }
 }
 
-// ======= НАВИГАЦИЯ =======
-class Navigation {
-  static showSection(targetId) {
-    // Скрываем все секции
-    document.querySelectorAll('.container, .page-section').forEach(section => {
-      Utils.addClass(section, 'hidden-section');
-      Utils.removeClass(section, 'active');
-    });
-
-    // Показываем нужную секцию
-    let sectionToShow;
-    if (targetId === 'main') {
-      sectionToShow = DOM.mainContainer;
-    } else {
-      sectionToShow = document.getElementById(`${targetId}-section`);
-    }
-
-    if (sectionToShow) {
-      Utils.removeClass(sectionToShow, 'hidden-section');
-      Utils.addClass(sectionToShow, 'active');
-    }
-
-    // Сброс состояния игры при переходе на главную
-    if (targetId === 'main') {
-      GameLogic.backToGenres();
-    }
-  }
-
-  static init() {
-    // Обработка ссылок навигации
-    document.querySelectorAll('[data-target]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.getAttribute('data-target');
-        this.showSection(targetId);
-      });
-    });
-  }
-}
-
-// ======= КОНТАКТНАЯ ФОРМА =======
-class ContactForm {
-  static async send() {
-    const email = DOM.contactEmail?.value?.trim();
-    const message = DOM.contactMessage?.value?.trim();
-
-    if (!email || !message) {
-      UI.showError('Заполните все поля');
-      return;
-    }
-
-    if (!this.isValidEmail(email)) {
-      UI.showError('Введите корректный email');
-      return;
-    }
-
-    try {
-      // Здесь можно добавить реальную отправку через API
-      // Пока что просто показываем успешное сообщение
-      
-      UI.showSuccess('Сообщение отправлено! Спасибо за обратную связь 💌');
-      
-      // Очищаем форму
-      if (DOM.contactEmail) DOM.contactEmail.value = '';
-      if (DOM.contactMessage) DOM.contactMessage.value = '';
-      
-    } catch (error) {
-      UI.showError('Ошибка отправки сообщения');
-    }
-  }
-
-  static isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
-  static init() {
-    if (DOM.sendMessage) {
-      DOM.sendMessage.addEventListener('click', () => this.send());
-    }
-  }
-}
-
 // ======= ИНИЦИАЛИЗАЦИЯ =======
 class App {
   static async init() {
@@ -581,13 +454,6 @@ class App {
       // Создаем кнопки жанров
       GameLogic.createGenreButtons();
 
-      // Инициализируем компоненты
-      Navigation.init();
-      ContactForm.init();
-      
-      // Показываем главную страницу
-      Navigation.showSection('main');
-
       // Инициализируем чат
       ChatBot.init();
 
@@ -598,7 +464,7 @@ class App {
 
     } catch (error) {
       console.error('❌ Ошибка инициализации:', error);
-      UI.showError('Ошибка инициализации игры');
+      UI.showNotification('Ошибка инициализации игры', 'error');
     }
   }
 
@@ -704,6 +570,12 @@ style.textContent = `
     0%, 60%, 100% { opacity: 0.4; transform: scale(1); }
     30% { opacity: 1; transform: scale(1.2); }
   }
+
+  .loading-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease-out;
+  }
 `;
 document.head.appendChild(style);
 
@@ -714,7 +586,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   // Показываем версию в консоли
   console.log(`
-    🎮 АБСУРДНАЯ ИГРА v2.0
+    🎮 АБСУРДНАЯ ИГРА v2.0 - Многостраничная версия
     🎲 Готово к абсурду!
     📱 Поддержка мобильных устройств
     🤖 AI чат-бот активен
@@ -728,7 +600,6 @@ if (typeof window !== 'undefined') {
     GameLogic,
     UI,
     ChatBot,
-    Navigation,
     genres
   };
 }
