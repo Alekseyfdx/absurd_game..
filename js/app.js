@@ -310,7 +310,7 @@ class GameLogic {
 // ======= ЧАТ-БОТ =======
 class ChatBot {
   static async sendToGemini(prompt) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-pro:generateContent?key=${CONFIG.GEMINI_API_KEY}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-pro:generateContent?key=${CONFIG.AIzaSyBEwUcxAfqJ9SxLXwEfbJ8EtkCtSJoMTeQ}`;
     
     const payload = {
       contents: [{
