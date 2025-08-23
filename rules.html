@@ -2,34 +2,285 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Правила игры</title>
-<meta name="google-adsense-account" content="ca-pub-8922825157298560">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Правила игры - Абсурдная Игра</title>
+  <meta name="description" content="Как играть в Абсурдную Игру - простые правила и инструкции">
+  
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-8922825157298560">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8922825157298560" crossorigin="anonymous"></script>
+  
   <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1a1a2e">
 </head>
 <body>
-  <!-- Контейнер для страницы "Правила игры" -->
-  <div class="container">
-    <h1 class="neon">Правила игры</h1>
-    <p>Правила очень просты:</p>
-    <ul>
-      <li>Выберите один из жанров.</li>
-      <li>Прочитайте фразу, которая появится на экране.</li>
-      <li>Если фраза вам понравилась, нажмите кнопку «Следующая фраза», чтобы получить новую.</li>
-    </ul>
-    <p>Наслаждайтесь абсурдом!</p>
-    <a href="index.html" class="back-link">Вернуться на главную</a>
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loading-screen">
+    <div class="loading-spinner"></div>
+    <p>Загружаем правила...</p>
   </div>
 
-  <!-- Футер с навигацией по сайту -->
-  <footer class="footer">
-    <div class="footer-links">
-      <a href="about.html">О нас</a>
-      <a href="contacts.html">Контакты</a>
-      <a href="rules.html">Правила игры</a>
-      <a href="policy.html">Политика конфиденциальности</a>
+  <!-- Rules Page Content -->
+  <main class="page-section">
+    <div class="container">
+      <header class="section-header">
+        <h1 class="neon-title">Правила игры</h1>
+        <p style="color: var(--text-muted); font-size: 18px;">Освойте абсурд за 3 простых шага! 🎯</p>
+      </header>
+      
+      <div class="content-block">
+        <!-- Быстрый старт -->
+        <div style="background: var(--gradient-dark); border-radius: var(--radius); padding: 30px; margin-bottom: 40px; text-align: center; border: 1px solid rgba(125,249,255,0.2);">
+          <h2 style="color: var(--accent-2); margin-bottom: 15px;">⚡ Быстрый старт</h2>
+          <p style="font-size: 20px; font-weight: 600; margin: 0;">
+            Выбирай жанр → Читай фразу → Смейся → Повторяй! 🎲
+          </p>
+        </div>
+
+        <!-- Пошаговые правила -->
+        <h2 style="color: var(--accent-2); text-align: center; margin: 40px 0 30px 0;">📝 Пошаговая инструкция</h2>
+        
+        <div class="rules-list" style="max-width: none;">
+          <div class="rule-item">
+            <div class="rule-number">1</div>
+            <div class="rule-content">
+              <h3>🎭 Выберите жанр</h3>
+              <p>На главной странице вы найдете 6 уникальных жанров:</p>
+              <ul style="margin-top: 15px; padding-left: 20px;">
+                <li><strong>🧸 Детское</strong> - Абсурдные ситуации с детьми</li>
+                <li><strong>🤪 Абсурд</strong> - Сюрреалистические истории</li>
+                <li><strong>👻 Хоррор</strong> - Мистический абсурд</li>
+                <li><strong>💕 Романтика</strong> - Любовный абсурд</li>
+                <li><strong>🏙️ Уличное</strong> - Бытовые ситуации</li>
+                <li><strong>🔞 18+</strong> - Контент для взрослых</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="rule-item">
+            <div class="rule-number">2</div>
+            <div class="rule-content">
+              <h3>📖 Читайте фразы</h3>
+              <p>После выбора жанра на экране появится случайная абсурдная фраза. Каждая фраза уникальна и создана для того, чтобы:</p>
+              <ul style="margin-top: 15px; padding-left: 20px;">
+                <li>Вызвать улыбку или смех 😄</li>
+                <li>Удивить неожиданным поворотом 😲</li>
+                <li>Вдохновить на творчество 💡</li>
+                <li>Просто поднять настроение 🌈</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="rule-item">
+            <div class="rule-number">3</div>
+            <div class="rule-content">
+              <h3>🎲 Получайте новые фразы</h3>
+              <p>Понравилась фраза? Нажмите <strong>"Следующая фраза"</strong> чтобы получить новую! У нас более 300 уникальных фраз, так что скучать не придется.</p>
+              <div style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: var(--radius-sm);">
+                <strong>💡 Совет:</strong> Используйте клавишу <kbd style="background: var(--accent); color: white; padding: 2px 6px; border-radius: 3px; font-family: monospace;">SPACE</kbd> для быстрой генерации новой фразы!
+              </div>
+            </div>
+          </div>
+          
+          <div class="rule-item">
+            <div class="rule-number">4</div>
+            <div class="rule-content">
+              <h3>🎉 Наслаждайтесь абсурдом!</h3>
+              <p>Главное правило - веселиться! Делитесь смешными фразами с друзьями, используйте их как источник вдохновения или просто наслаждайтесь моментом безумия.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Дополнительные возможности -->
+        <div style="margin: 50px 0;">
+          <h2 style="color: var(--accent-2); text-align: center; margin-bottom: 30px;">🚀 Дополнительные возможности</h2>
+          
+          <div class="features-grid">
+            <div class="feature-card">
+              <div class="feature-icon">🤖</div>
+              <h3>Чат с Абсурд-ботом</h3>
+              <p>Общайтесь с нашим AI-ботом! Он ответит на любой вопрос в своем уникальном абсурдном стиле.</p>
+            </div>
+            
+            <div class="feature-card">
+              <div class="feature-icon">📊</div>
+              <h3>Статистика игры</h3>
+              <p>Следите за количеством сгенерированных фраз. Станьте чемпионом абсурда!</p>
+            </div>
+            
+            <div class="feature-card">
+              <div class="feature-icon">🔄</div>
+              <h3>Смена жанров</h3>
+              <p>В любой момент можно вернуться к выбору жанров и попробовать что-то новое.</p>
+            </div>
+            
+            <div class="feature-card">
+              <div class="feature-icon">📱</div>
+              <h3>Мобильная версия</h3>
+              <p>Играйте где угодно! Сайт оптимизирован для всех устройств и работает даже офлайн.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Горячие клавиши -->
+        <div style="background: rgba(255,60,142,0.1); border-radius: var(--radius); padding: 30px; margin: 40px 0; border: 1px solid rgba(255,60,142,0.3);">
+          <h3 style="color: var(--accent); text-align: center; margin-bottom: 25px;">⌨️ Горячие клавиши</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+            <div style="text-align: center;">
+              <kbd style="background: var(--accent-2); color: black; padding: 8px 12px; border-radius: 6px; font-weight: bold; display: inline-block; margin-bottom: 10px;">SPACE</kbd>
+              <div style="color: var(--text-muted);">Следующая фраза</div>
+            </div>
+            <div style="text-align: center;">
+              <kbd style="background: var(--accent); color: white; padding: 8px 12px; border-radius: 6px; font-weight: bold; display: inline-block; margin-bottom: 10px;">ESC</kbd>
+              <div style="color: var(--text-muted);">Вернуться к жанрам</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Советы для лучшего опыта -->
+        <div style="margin: 40px 0;">
+          <h3 style="color: var(--accent-2); text-align: center; margin-bottom: 25px;">💡 Советы для лучшего опыта</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+            <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: var(--radius-sm); border-left: 4px solid var(--accent-2);">
+              <h4 style="color: var(--accent-2); margin-bottom: 10px;">🎭 Для компании</h4>
+              <p style="margin: 0; font-size: 14px;">Читайте фразы вслух с друзьями и придумывайте продолжение историй!</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: var(--radius-sm); border-left: 4px solid var(--accent);">
+              <h4 style="color: var(--accent); margin-bottom: 10px;">🎨 Для творчества</h4>
+              <p style="margin: 0; font-size: 14px;">Используйте фразы как основу для рассказов, стихов или арт-проектов.</p>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: var(--radius-sm); border-left: 4px solid var(--success);">
+              <h4 style="color: var(--success); margin-bottom: 10px;">😄 Для настроения</h4>
+              <p style="margin: 0; font-size: 14px;">Включайте игру, когда нужно отвлечься или поднять настроение.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Важные моменты -->
+        <div style="background: rgba(255,255,255,0.08); border-radius: var(--radius); padding: 25px; margin: 40px 0;">
+          <h3 style="color: var(--warning); margin-bottom: 20px; text-align: center;">⚠️ Важно знать</h3>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin: 12px 0; display: flex; align-items: flex-start; gap: 10px;">
+              <span style="color: var(--accent-2); font-size: 18px;">🔞</span>
+              <span>Жанр "18+" содержит контент для взрослых</span>
+            </li>
+            <li style="margin: 12px 0; display: flex; align-items: flex-start; gap: 10px;">
+              <span style="color: var(--success); font-size: 18px;">🎯</span>
+              <span>Все фразы созданы исключительно для развлечения</span>
+            </li>
+            <li style="margin: 12px 0; display: flex; align-items: flex-start; gap: 10px;">
+              <span style="color: var(--accent); font-size: 18px;">💝</span>
+              <span>Игра полностью бесплатна и не содержит скрытых платежей</span>
+            </li>
+            <li style="margin: 12px 0; display: flex; align-items: flex-start; gap: 10px;">
+              <span style="color: var(--accent-2); font-size: 18px;">🔄</span>
+              <span>Содержимое регулярно обновляется новыми фразами</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div style="text-align: center; margin-top: 50px;">
+        <a href="index.html" class="btn btn-primary" style="margin-right: 20px; text-decoration: none;">
+          <span>🎮 Начать играть</span>
+        </a>
+        <a href="about.html" class="btn btn-secondary" style="text-decoration: none;">
+          <span>📋 О проекте</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Chat Bot -->
+  <div class="chat-widget">
+    <button class="chat-toggle-btn" id="chat-toggle-btn" title="Задать вопрос боту">
+      <span class="chat-icon">💬</span>
+      <span class="chat-text">Абсурд-бот</span>
+    </button>
+    
+    <div class="chat-container" id="chat-container">
+      <div class="chat-header">
+        <div class="chat-title">
+          <span class="bot-avatar">🤖</span>
+          <span>Абсурд-бот</span>
+        </div>
+        <button class="chat-close" id="close-chat-btn">&times;</button>
+      </div>
+      
+      <div class="chat-body" id="chat-body">
+        <div class="chat-message bot-message">
+          Не понял правила? Спроси меня! Я объясню все абсурдно просто! 🎯
+        </div>
+      </div>
+      
+      <div class="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Спросите о правилах игры..." maxlength="500">
+        <button id="send-chat-btn" class="chat-send-btn">📤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="index.html" class="footer-link">🎮 Главная</a>
+        <a href="about.html" class="footer-link">📋 О нас</a>
+        <a href="rules.html" class="footer-link active">📜 Правила</a>
+        <a href="contacts.html" class="footer-link">📫 Контакты</a>
+        <a href="policy.html" class="footer-link">🔒 Конфиденциальность</a>
+      </div>
+      
+      <div class="footer-info">
+        <p>&copy; 2024 Абсурдная Игра. Создано с любовью к абсурду ❤️</p>
+      </div>
     </div>
   </footer>
+
+  <!-- Scripts -->
+  <script src="js/app.js" defer></script>
+  
+  <script>
+    // Простая инициализация для статических страниц
+    document.addEventListener('DOMContentLoaded', function() {
+      // Скрыть loading screen
+      const loadingScreen = document.getElementById('loading-screen');
+      setTimeout(() => {
+        loadingScreen.classList.add('hidden');
+      }, 800);
+
+      // Подсветить активную ссылку в футере
+      document.querySelectorAll('.footer-link').forEach(link => {
+        if (link.href === window.location.href) {
+          link.classList.add('active');
+        }
+      });
+
+      // Инициализация чата для страницы правил
+      if (window.ChatBot) {
+        setTimeout(() => {
+          window.ChatBot.addMessage('Есть вопросы по правилам? Я готов помочь! 📜', false);
+        }, 1500);
+      }
+    });
+  </script>
+
+  <style>
+    .footer-link.active {
+      color: var(--accent-2) !important;
+      opacity: 1 !important;
+    }
+    .loading-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    kbd {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      font-weight: bold;
+    }
+  </style>
 </body>
 </html>
-
