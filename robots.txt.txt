@@ -1,0 +1,72 @@
+# robots.txt — Absurdia (обновлено 2025-08-23)
+# Цель: индексируются только контент-страницы; трекинг-параметры и служебные разделы не попадают в индекс.
+
+# === Глобально для всех роботов =============================================
+
+User-agent: *
+Allow: /
+# Разрешаем статику (на случай, если где-то будет общий Disallow)
+Allow: /assets/
+Allow: /static/
+Allow: /images/
+Allow: /css/
+Allow: /js/
+Allow: /.well-known/
+
+# Не индексируем служебные и мусорные разделы
+Disallow: /admin/
+Disallow: /private/
+Disallow: /cgi-bin/
+Disallow: /tmp/
+Disallow: /includes/
+Disallow: /test/
+Disallow: /node_modules/
+Disallow: /feed/
+Disallow: /comments/
+Disallow: /search/          # внутренний поиск не нужен в индексе
+Disallow: /api/             # отдаёт данные, а не страницы
+
+# Режем только типовые трекинг-параметры (НЕ блокируем все '?', чтобы не ломать SPA/функционал)
+Disallow: /*?*utm_*=*
+Disallow: /*?*gclid=*
+Disallow: /*?*fbclid=*
+Disallow: /*?*yclid=*
+Disallow: /*?*ref=*
+Disallow: /*?*referrer=*
+
+# Карты сайта (для всех)
+Sitemap: https://absudia.com/sitemap.xml
+# Если будет нужно — добавь ниже:
+# Sitemap: https://absudia.com/sitemap-images.xml
+# Sitemap: https://absudia.com/sitemap-videos.xml
+
+# === Google ================================================================
+# Google игнорирует Crawl-delay — не указываем.
+User-agent: Googlebot
+Allow: /
+User-agent: Googlebot-Image
+Allow: /
+User-agent: AdsBot-Google
+Allow: /
+
+# === Bing / Yahoo / DuckDuckGo (bingbot) ==================================
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 5   # мягкая пауза для экономии ресурсов
+
+# === Яндекс (на случай русскоязычного трафика из RU/CIS) ===================
+User-agent: Yandex
+Allow: /
+Host: absudia.com
+Clean-param: ref /
+Clean-param: utm_source&utm_medium&utm_campaign&utm_term&utm_content /
+Crawl-delay: 10
+
+# === Нецелевая аудитория (например, Китай) — по желанию =====================
+#User-agent: Baiduspider
+#Disallow: /
+
+# Подсказки:
+# 1) Геотаргетинг делается в Search Console (International Targeting), а не в robots.txt.
+# 2) Для борьбы с дублями используйте <link rel="canonical"> на страницах.
+# 3) После выкладки проверьте файл и URL в Google Search Console.

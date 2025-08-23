@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Главная -->
+  <url>
+    <loc>https://absudia.com/</loc>
+    <lastmod>2025-08-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://absudia.com/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://absudia.com/"/>
+    <image:image>
+      <image:loc>https://absudia.com/images/absurdia-banner-16x9.jpg</image:loc>
+      <image:title>Абсурдия — проверь свою реальность</image:title>
+      <image:caption>Игра абсурдных фраз и заданий</image:caption>
+    </image:image>
+  </url>
+
+  <!-- О нас -->
+  <url>
+    <loc>https://absudia.com/about.html</loc>
+    <lastmod>2025-08-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://absudia.com/about.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://absudia.com/about.html"/>
+  </url>
+
+  <!-- Правила -->
+  <url>
+    <loc>https://absudia.com/rules.html</loc>
+    <lastmod>2025-08-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://absudia.com/rules.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://absudia.com/rules.html"/>
+  </url>
+
+  <!-- Контакты -->
+  <url>
+    <loc>https://absudia.com/contacts.html</loc>
+    <lastmod>2025-08-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://absudia.com/contacts.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://absudia.com/contacts.html"/>
+  </url>
+
+  <!-- Политика конфиденциальности -->
+  <url>
+    <loc>https://absudia.com/policy.html</loc>
+    <lastmod>2025-08-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://absudia.com/policy.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://absudia.com/policy.html"/>
+  </url>
+
+</urlset>
